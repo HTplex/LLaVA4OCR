@@ -249,6 +249,10 @@ def smart_tokenizer_and_embedding_resize(
 def _tokenize_fn(strings: Sequence[str],
                  tokenizer: transformers.PreTrainedTokenizer) -> Dict:
     """Tokenize a list of strings."""
+    # for qwen
+    if not tokenizer.pad_token_id:
+        tokenizer.pad_token_id = tokenizer.eos_token_id
+    #/ for qwen
     tokenized_list = [
         tokenizer(
             text,
@@ -748,6 +752,10 @@ class DataCollatorForSupervisedDataset(object):
     def __call__(self, instances: Sequence[Dict]) -> Dict[str, torch.Tensor]:
         input_ids, labels = tuple([instance[key] for instance in instances]
                                   for key in ("input_ids", "labels"))
+        # for qwen
+        if not self.tokenizer.pad_token_id:
+            self.tokenizer.pad_token_id = self.tokenizer.eos_token_id
+        #/ for qwen
         input_ids = torch.nn.utils.rnn.pad_sequence(
             input_ids,
             batch_first=True,

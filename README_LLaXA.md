@@ -46,6 +46,18 @@ pip install -e .
 
 1. pre-training
 
+./scripts/v1_5/pretrain.sh
+
+data related 
+
+data_path ./playground/data/LLaVA-Pretrain/blip_laion_cc_sbu_558k.json
+image_folder ./playground/data/LLaVA-Pretrain/images
+
+json format
+image folder format
+
+
+
 ## Train from llava
 
 *Below is the latest training configuration for LLaVA v1.5. For legacy models, please refer to README of [this](https://github.com/haotian-liu/LLaVA/tree/v1.0.1) version for now. We'll add them in a separate doc later.*
