@@ -48,6 +48,35 @@ def get_mouth_square(landmarks,h,w):
     bbox_y1,bbox_y2 = bbox_ymid-bbox_width//2+y_shift,bbox_ymid+(bbox_width-bbox_width//2)+y_shift
     return bbox_x1,bbox_y1,bbox_x2,bbox_y2
 
+def gen_mouth_grid(mouth_frames, output_config="336/14", method="simple"):
+    """given a batch of mouth frames, generate mouth grid
+    Args:
+        mouth_frames_np (np.uint8): frames*h*w*c mouth images
+        output_config (str, optional): output model config, represents how vit use it, such as 
+            which means a square is 384*384 with each tile of 14*14"384/14".
+        method (str, optional): method used for preprocessing and fitting into tiles,
+        Defaults to "simple".
+        "simple": simply resize the mouth frames to fit into each tile, black tiles if no mouth
+            detected or video not long enough.
+    """
+    canvas_h,tile_h = output_config.split("/")
+    canvas_h,canvas_w,tile_h,tile_w = int(canvas_h),int(canvas_h),int(tile_h),int(tile_h)
+    if method == "simple":
+        if mouth_frames.shape[0] > (canvas_h//tile_h)**2:
+            raise ValueError(
+                "video too long, mouth_frames shape: {}, total num of grid: {}".format(
+                mouth_frames.shape[0],(canvas_h//tile_h)**2))
+        mouth_grid = np.zeros((canvas_h, canvas_w, 3), dtype=np.uint8)
+        for i in range(mouth_frames.shape[0]):
+            row = i // (canvas_h//tile_h)
+            col = i % (canvas_h//tile_h)
+            tile = cv2.resize(mouth_frames[i], (tile_w, tile_h))
+            if len(tile.shape) == 2:
+                tile = cv2.cvtColor(tile, cv2.COLOR_GRAY2RGB)
+            mouth_grid[row*tile_h:(row+1)*tile_h,col*tile_w:(col+1)*tile_w] = tile
+        return mouth_grid
+    raise NotImplementedError("method {} not implemented".format(method))
+
 def show_img_np(img, max_h=3, max_w=20, save=False, cmap='gray'):
     """
     :param np_array: input image, one channel or 3 channel,

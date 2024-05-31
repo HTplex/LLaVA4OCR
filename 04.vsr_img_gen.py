@@ -15,15 +15,23 @@ from os.path import exists
 def job(data_id):
     # meta
     fps = 25
-    frame_len = 23*fps
+    frame_len = 5*fps
     mouth_h,mouth_w = 36,36
     face_h,face_w = 100,80
-    data_root = "/data/agent_h/vsr2/datasets/datasets_chunyu/face_text_windows_v3_23/"
+    data_root = "/data/agent_h/vsr2/datasets/datasets_chunyu/face_text_windows_v3_5/"
     all_video_paths = glob("/data/agent_h/vsr2/datasets/datasets_chunyu/clip_videos_v3/**/*.mp4", recursive=True)
     face_save_path = join(data_root,data_id+"_face.npz")
     mouth_save_path = join(data_root,data_id+"_mouth.npz")
     if exists(face_save_path) and exists(mouth_save_path):
-        return
+        # check npz is not interrupted
+        try:
+            np.load(face_save_path)
+            np.load(mouth_save_path)
+        except:
+            print('data_id',data_id,'corrupted, reprocessing')
+            pass
+        else:
+            return
     # init video path index
     indexed_video_paths = {}
     for video_path in all_video_paths:
@@ -77,7 +85,7 @@ def job(data_id):
 
 if __name__ == "__main__":
     p = Pool(64)
-    data_root = "/data/agent_h/vsr2/datasets/datasets_chunyu/face_text_windows_v3_23/"
+    data_root = "/data/agent_h/vsr2/datasets/datasets_chunyu/face_text_windows_v3_5/"
     data_ids = sorted([basename(x[:-5]) for x in glob(join(data_root,"*.json"))])
     for _ in tqdm(p.imap_unordered(job,data_ids),total=len(data_ids)):
         pass
