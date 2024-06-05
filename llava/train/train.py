@@ -11,7 +11,7 @@
 #    Unless required by applicable law or agreed to in writing, software
 #    distributed under the License is distributed on an "AS IS" BASIS,
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#    See the License for the specific language governing permissions and
+#    See the License for the specific language governing permissions and 
 #    limitations under the License.
 
 import os
@@ -340,7 +340,10 @@ def preprocess_llama_2(
 ) -> Dict:
     conv = conversation_lib.default_conversation.copy()
     roles = {"human": conv.roles[0], "gpt": conv.roles[1]}
-
+    # for qwen
+    if not tokenizer.pad_token_id:
+        tokenizer.pad_token_id = tokenizer.eos_token_id
+    #/ for qwen
     # Apply prompt templates
     conversations = []
     for i, source in enumerate(sources):
@@ -420,9 +423,13 @@ def preprocess_v1(
     tokenizer: transformers.PreTrainedTokenizer,
     has_image: bool = False
 ) -> Dict:
+    
     conv = conversation_lib.default_conversation.copy()
     roles = {"human": conv.roles[0], "gpt": conv.roles[1]}
-
+    # for qwen
+    if not tokenizer.pad_token_id:
+        tokenizer.pad_token_id = tokenizer.eos_token_id
+    #/ for qwen
     # Apply prompt templates
     conversations = []
     for i, source in enumerate(sources):
