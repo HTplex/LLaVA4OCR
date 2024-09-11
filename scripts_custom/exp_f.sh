@@ -1,7 +1,7 @@
 # vit_l_336/14 qwen2 0.5b, lrs3 336/28, 
 # 8x h100, 
 deepspeed llava/train/train_mem.py \
-    --output_dir "/home/agent_h/data/data_new/llms-exp/0910_1_pretrain_05b" \
+    --output_dir "/home/agent_h/data/data_new/llms-exp/exp_f" \
     --model_name_or_path "/home/agent_h/data/data_new/llms/Qwen2-0_5B" \
     --data_path "/home/agent_h/data/data_new/datasets/facetalk_train/0906_lrs3_train/labels.json" \
     --image_folder "/home/agent_h/data/data_new/datasets/facetalk_train/0906_lrs3_train/images" \

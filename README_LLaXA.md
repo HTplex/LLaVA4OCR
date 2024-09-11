@@ -19,19 +19,15 @@ cd LLaVA
 
 2. Install Package
 ```Shell
-conda create -n llava python=3.10 -y
-conda activate llava
+conda create -n llaxa python=3.10 -y
+conda activate llaxa
 pip install --upgrade pip  # enable PEP 660 support
-pip install -e .
-```
-
-3. Install additional packages for training cases
-```
-pip install -e ".[train]"
+pip install -e ".[train]" -i https://mirror.sjtu.edu.cn/pypi/web/simple
 pip install tensorboardX
 pip install flash-attn --no-build-isolation # takes 1 hour
 
 ```
+
 
 ### Upgrade to latest code base
 
@@ -43,6 +39,17 @@ pip install -e .
 # please try running the command below (without #)
 # pip install flash-attn --no-build-isolation --no-cache-dir
 ```
+
+### QA:
+loss suddent zero
+
+"zero_optimization": {
+        "stage": 2,
+        "overlap_comm": false, # this
+        "contiguous_gradients": true,
+        "sub_group_size": 1e9,
+        "reduce_bucket_size": "auto"
+    }
 
 ## train no bullshit
 
