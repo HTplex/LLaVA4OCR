@@ -14,13 +14,14 @@ deepspeed llava/train/train_mem.py \
     --mm_use_im_start_end False \
     --mm_use_im_patch_token False \
     --bf16 True \
-    --num_train_epochs 3000000 \
+    --num_train_epochs 30 \
     --per_device_train_batch_size 32 \
     --per_device_eval_batch_size 4 \
     --gradient_accumulation_steps 1 \
     --evaluation_strategy "no" \
+    --save_steps 3000 \
     --save_strategy "steps" \
-    --save_steps 24000 \
+    --save_steps 30000 \
     --save_total_limit 1 \
     --learning_rate 1e-3 \
     --weight_decay 0. \

@@ -105,6 +105,12 @@ pip install -e .
 # pip install flash-attn --no-build-isolation --no-cache-dir
 ```
 
+### train
+
+```shell
+bash scripts_custom/0910_1_exp0.sh
+```
+
 ### Quick Start With HuggingFace
 
 <details>
